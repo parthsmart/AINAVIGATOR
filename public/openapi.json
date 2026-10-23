@@ -1,0 +1,902 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AI Career Navigator API",
+    "version": "1.0.0",
+    "description": "Backend API services for AI Career Navigator"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "health_check_root",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HealthResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/health": {
+      "get": {
+        "operationId": "health_check_v1",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HealthResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ready": {
+      "get": {
+        "operationId": "readiness_check_v1",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ReadinessResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/signup": {
+      "post": {
+        "operationId": "signup_v1_auth_signup_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserSignupRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserResponse" }
+              }
+            }
+          },
+          "409": { "description": "Conflict" },
+          "422": { "description": "Validation Error" }
+        }
+      }
+    },
+    "/v1/auth/login": {
+      "post": {
+        "operationId": "login_v1_auth_login_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserLoginRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TokenResponse" }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/v1/auth/refresh": {
+      "post": {
+        "operationId": "refresh_tokens_v1_auth_refresh_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TokenRefreshRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TokenResponse" }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/v1/auth/logout": {
+      "post": {
+        "operationId": "logout_v1_auth_logout_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LogoutRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MessageResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/logout-all": {
+      "post": {
+        "operationId": "logout_all_v1_auth_logout_all_post",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MessageResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/change-password": {
+      "post": {
+        "operationId": "change_password_v1_auth_change_password_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ChangePasswordRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MessageResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/forgot-password": {
+      "post": {
+        "operationId": "forgot_password_v1_auth_forgot_password_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ForgotPasswordRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MessageResponse" }
+              }
+            }
+          },
+          "429": { "description": "Too Many Requests" }
+        }
+      }
+    },
+    "/v1/auth/reset-password": {
+      "post": {
+        "operationId": "reset_password_v1_auth_reset_password_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ResetPasswordRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MessageResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/me": {
+      "get": {
+        "operationId": "get_me_v1_auth_me_get",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserResponse" }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/v1/profile": {
+      "get": {
+        "operationId": "get_profile_v1_profile_get",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProfileResponse" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "update_profile_v1_profile_put",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ProfileUpdateRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProfileResponse" }
+              }
+            }
+          },
+          "422": { "description": "Validation Error" }
+        }
+      }
+    },
+    "/v1/assessment/questions": {
+      "get": {
+        "operationId": "get_questions_v1_assessment_questions_get",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/QuestionsListResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/assessment/attempt": {
+      "get": {
+        "operationId": "get_current_attempt_v1_assessment_attempt_get",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AttemptResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/assessment/answers": {
+      "post": {
+        "operationId": "save_answers_post_v1_assessment_answers_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SaveAnswersRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AttemptResponse" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "save_answers_put_v1_assessment_answers_put",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SaveAnswersRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AttemptResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/assessment/submit": {
+      "post": {
+        "operationId": "submit_assessment_v1_assessment_submit_post",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SubmitAssessmentRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AssessmentResultResponse" }
+              }
+            }
+          },
+          "422": { "description": "Missing Answers" }
+        }
+      }
+    },
+    "/v1/assessment/results/latest": {
+      "get": {
+        "operationId": "get_latest_result_v1_assessment_results_latest_get",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AssessmentResultResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/assessment/results": {
+      "get": {
+        "operationId": "get_all_results_v1_assessment_results_get",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/AssessmentResultResponse" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/assessment/results/{result_id}": {
+      "get": {
+        "operationId": "get_result_by_id_v1_assessment_results_id_get",
+        "parameters": [
+          {
+            "name": "result_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AssessmentResultResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/assessment/results/{result_id}/ask": {
+      "post": {
+        "operationId": "ask_assessment_question_v1_assessment_results_id_ask_post",
+        "parameters": [
+          {
+            "name": "result_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AssessmentQARequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AssessmentQAResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/assessment/results/{result_id}/choose": {
+      "post": {
+        "operationId": "choose_career_from_result_v1_assessment_results_id_choose_post",
+        "parameters": [
+          {
+            "name": "result_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ChooseCareerRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ChooseCareerResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/careers": {
+      "get": {
+        "operationId": "list_careers_v1_careers_get",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CareersListResponse" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HealthResponse": {
+        "type": "object",
+        "required": ["status", "environment"],
+        "properties": {
+          "status": { "type": "string" },
+          "environment": { "type": "string" }
+        }
+      },
+      "ReadinessResponse": {
+        "type": "object",
+        "required": ["status", "dependencies"],
+        "properties": {
+          "status": { "type": "string" },
+          "dependencies": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          }
+        }
+      },
+      "UserSignupRequest": {
+        "type": "object",
+        "required": ["email", "password", "education_level"],
+        "properties": {
+          "email": { "type": "string", "format": "email" },
+          "password": { "type": "string", "minLength": 8 },
+          "education_level": { "type": "string", "enum": ["class_11_12", "college"] },
+          "age_confirmed": { "type": "boolean" },
+          "parental_consent_email": { "type": "string" }
+        }
+      },
+      "UserLoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": { "type": "string", "format": "email" },
+          "password": { "type": "string" }
+        }
+      },
+      "TokenRefreshRequest": {
+        "type": "object",
+        "required": ["refresh_token"],
+        "properties": {
+          "refresh_token": { "type": "string" }
+        }
+      },
+      "LogoutRequest": {
+        "type": "object",
+        "required": ["refresh_token"],
+        "properties": {
+          "refresh_token": { "type": "string" }
+        }
+      },
+      "ChangePasswordRequest": {
+        "type": "object",
+        "required": ["current_password", "new_password"],
+        "properties": {
+          "current_password": { "type": "string" },
+          "new_password": { "type": "string", "minLength": 8 }
+        }
+      },
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "string", "format": "email" }
+        }
+      },
+      "ResetPasswordRequest": {
+        "type": "object",
+        "required": ["token", "new_password"],
+        "properties": {
+          "token": { "type": "string" },
+          "new_password": { "type": "string", "minLength": 8 }
+        }
+      },
+      "TokenResponse": {
+        "type": "object",
+        "required": ["access_token", "refresh_token", "token_type", "expires_in"],
+        "properties": {
+          "access_token": { "type": "string" },
+          "refresh_token": { "type": "string" },
+          "token_type": { "type": "string" },
+          "expires_in": { "type": "integer" }
+        }
+      },
+      "MessageResponse": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "message": { "type": "string" }
+        }
+      },
+      "UserResponse": {
+        "type": "object",
+        "required": ["id", "email", "role", "education_level", "is_active", "created_at"],
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "email": { "type": "string", "format": "email" },
+          "role": { "type": "string" },
+          "education_level": { "type": "string" },
+          "is_active": { "type": "boolean" },
+          "created_at": { "type": "string", "format": "date-time" }
+        }
+      },
+      "ProfileProjectItem": {
+        "type": "object",
+        "required": ["title", "description"],
+        "properties": {
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "link": { "type": "string" }
+        }
+      },
+      "ProfileCompetitionItem": {
+        "type": "object",
+        "required": ["title", "outcome"],
+        "properties": {
+          "title": { "type": "string" },
+          "outcome": { "type": "string" },
+          "year": { "type": "string" }
+        }
+      },
+      "ProfileRecordLink": {
+        "type": "object",
+        "required": ["title", "url"],
+        "properties": {
+          "title": { "type": "string" },
+          "url": { "type": "string" },
+          "category": { "type": "string" }
+        }
+      },
+      "ProfileResponse": {
+        "type": "object",
+        "required": [
+          "user_id",
+          "full_name",
+          "education_level",
+          "grade_level",
+          "budget_level",
+          "hours_per_week",
+          "timezone"
+        ],
+        "properties": {
+          "user_id": { "type": "string" },
+          "full_name": { "type": "string" },
+          "education_level": { "type": "string", "enum": ["class_11_12", "college"] },
+          "year": { "type": "string" },
+          "grade_level": { "type": "string" },
+          "budget_level": { "type": "string", "enum": ["low", "medium", "high"] },
+          "hours_per_day": { "type": "number" },
+          "hours_per_week": { "type": "integer" },
+          "location": { "type": "string" },
+          "timezone": { "type": "string" },
+          "subjects_of_interest": { "type": "array", "items": { "type": "string" } },
+          "hobbies": { "type": "array", "items": { "type": "string" } },
+          "past_work": { "type": "string" },
+          "projects": { "type": "array", "items": { "$ref": "#/components/schemas/ProfileProjectItem" } },
+          "competitions": { "type": "array", "items": { "$ref": "#/components/schemas/ProfileCompetitionItem" } },
+          "records": { "type": "array", "items": { "$ref": "#/components/schemas/ProfileRecordLink" } },
+          "declared_skills": { "type": "array", "items": { "type": "string" } },
+          "target_career_id": { "type": ["string", "null"] },
+          "updated_at": { "type": "string" }
+        }
+      },
+      "ProfileUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "full_name": { "type": "string" },
+          "education_level": { "type": "string", "enum": ["class_11_12", "college"] },
+          "year": { "type": "string" },
+          "grade_level": { "type": "string" },
+          "budget_level": { "type": "string", "enum": ["low", "medium", "high"] },
+          "hours_per_day": { "type": "number" },
+          "hours_per_week": { "type": "integer" },
+          "location": { "type": "string" },
+          "timezone": { "type": "string" },
+          "subjects_of_interest": { "type": "array", "items": { "type": "string" } },
+          "hobbies": { "type": "array", "items": { "type": "string" } },
+          "past_work": { "type": "string" },
+          "projects": { "type": "array", "items": { "$ref": "#/components/schemas/ProfileProjectItem" } },
+          "competitions": { "type": "array", "items": { "$ref": "#/components/schemas/ProfileCompetitionItem" } },
+          "records": { "type": "array", "items": { "$ref": "#/components/schemas/ProfileRecordLink" } },
+          "declared_skills": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "AssessmentQuestionItem": {
+        "type": "object",
+        "required": ["id", "order", "text", "dimension", "reverse_scored"],
+        "properties": {
+          "id": { "type": "string" },
+          "order": { "type": "integer" },
+          "text": { "type": "string" },
+          "dimension": { "type": "string" },
+          "reverse_scored": { "type": "boolean" }
+        }
+      },
+      "QuestionsListResponse": {
+        "type": "object",
+        "required": ["version_number", "title", "scale", "questions"],
+        "properties": {
+          "version_number": { "type": "integer" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "scale": { "type": "object", "additionalProperties": { "type": "string" } },
+          "questions": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AssessmentQuestionItem" }
+          }
+        }
+      },
+      "AttemptResponse": {
+        "type": "object",
+        "required": ["id", "user_id", "status", "answers", "updated_at"],
+        "properties": {
+          "id": { "type": "string" },
+          "user_id": { "type": "string" },
+          "status": { "type": "string", "enum": ["draft", "submitted"] },
+          "answers": { "type": "object", "additionalProperties": { "type": "integer" } },
+          "updated_at": { "type": "string" }
+        }
+      },
+      "SaveAnswersRequest": {
+        "type": "object",
+        "required": ["answers"],
+        "properties": {
+          "attempt_id": { "type": "string" },
+          "answers": { "type": "object", "additionalProperties": { "type": "integer" } }
+        }
+      },
+      "SubmitAssessmentRequest": {
+        "type": "object",
+        "properties": {
+          "attempt_id": { "type": "string" }
+        }
+      },
+      "StreamRecommendation": {
+        "type": "object",
+        "required": ["stream_name", "subjects", "reason"],
+        "properties": {
+          "stream_name": { "type": "string" },
+          "subjects": { "type": "array", "items": { "type": "string" } },
+          "reason": { "type": "string" }
+        }
+      },
+      "RecommendedCareerMatch": {
+        "type": "object",
+        "required": ["career_id", "code", "title", "cluster", "match_score", "reason"],
+        "properties": {
+          "career_id": { "type": "string" },
+          "code": { "type": "string" },
+          "title": { "type": "string" },
+          "cluster": { "type": "string" },
+          "match_score": { "type": "integer" },
+          "reason": { "type": "string" }
+        }
+      },
+      "AssessmentQAThreadItem": {
+        "type": "object",
+        "required": ["id", "question", "answer", "ai_status", "created_at"],
+        "properties": {
+          "id": { "type": "string" },
+          "question": { "type": "string" },
+          "answer": { "type": "string" },
+          "ai_status": { "type": "string", "enum": ["ready", "fallback", "out_of_scope", "pending"] },
+          "created_at": { "type": "string" }
+        }
+      },
+      "AssessmentResultResponse": {
+        "type": "object",
+        "required": [
+          "id",
+          "user_id",
+          "version",
+          "education_level",
+          "holland_code",
+          "holland_label",
+          "traits",
+          "skills",
+          "dimension_scores",
+          "explanation",
+          "ai_status",
+          "recommended_streams",
+          "recommended_careers",
+          "created_at"
+        ],
+        "properties": {
+          "id": { "type": "string" },
+          "user_id": { "type": "string" },
+          "version": { "type": "integer" },
+          "education_level": { "type": "string", "enum": ["class_11_12", "college"] },
+          "holland_code": { "type": "string" },
+          "holland_label": { "type": "string" },
+          "traits": { "type": "array", "items": { "type": "string" } },
+          "skills": { "type": "array", "items": { "type": "string" } },
+          "dimension_scores": { "type": "object", "additionalProperties": { "type": "number" } },
+          "explanation": { "type": "string" },
+          "ai_status": { "type": "string", "enum": ["ready", "fallback", "pending"] },
+          "recommended_streams": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/StreamRecommendation" }
+          },
+          "recommended_careers": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/RecommendedCareerMatch" }
+          },
+          "qa_thread": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AssessmentQAThreadItem" }
+          },
+          "chosen_career_id": { "type": ["string", "null"] },
+          "created_at": { "type": "string" }
+        }
+      },
+      "AssessmentQARequest": {
+        "type": "object",
+        "required": ["question"],
+        "properties": {
+          "question": { "type": "string", "maxLength": 500 }
+        }
+      },
+      "AssessmentQAResponse": {
+        "type": "object",
+        "required": ["id", "result_id", "question", "answer", "ai_status", "created_at"],
+        "properties": {
+          "id": { "type": "string" },
+          "result_id": { "type": "string" },
+          "question": { "type": "string" },
+          "answer": { "type": "string" },
+          "ai_status": { "type": "string", "enum": ["ready", "fallback", "out_of_scope", "pending"] },
+          "created_at": { "type": "string" }
+        }
+      },
+      "ChooseCareerRequest": {
+        "type": "object",
+        "required": ["career_id"],
+        "properties": {
+          "career_id": { "type": "string" }
+        }
+      },
+      "ChooseCareerResponse": {
+        "type": "object",
+        "required": ["result_id", "chosen_career_id", "status"],
+        "properties": {
+          "result_id": { "type": "string" },
+          "chosen_career_id": { "type": "string" },
+          "status": { "type": "string" }
+        }
+      },
+      "CareerSummary": {
+        "type": "object",
+        "required": ["id", "code", "title", "cluster", "overview", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "code": { "type": "string" },
+          "title": { "type": "string" },
+          "cluster": { "type": "string" },
+          "overview": { "type": "string" },
+          "status": { "type": "string" },
+          "compatibility_score": { "type": ["integer", "null"] },
+          "salary_min_inr": { "type": ["integer", "null"] },
+          "salary_max_inr": { "type": ["integer", "null"] },
+          "industry_demand": { "type": "string" },
+          "last_verified_at": { "type": ["string", "null"] }
+        }
+      },
+      "CareersListResponse": {
+        "type": "object",
+        "required": ["items", "total", "page", "page_size"],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CareerSummary" }
+          },
+          "total": { "type": "integer" },
+          "page": { "type": "integer" },
+          "page_size": { "type": "integer" }
+        }
+      }
+    }
+  }
+}

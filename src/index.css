@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Direction 2: "Deccan Basalt & Metro Wayfinding" (High-Contrast Transit Clarity) */
+:root {
+  /* Light Mode — Limestone Platform & Konkan Teal */
+  --color-canvas: 242 243 240;         /* #F2F3F0 Limestone Platform */
+  --color-surface: 255 255 255;        /* #FFFFFF White Tile */
+  --color-surface-muted: 229 232 227;  /* #E5E8E3 Stone Band */
+  --color-border: 198 205 199;         /* #C6CDC7 Stone Border */
+  --color-fg: 24 28 26;                /* #181C1A Charcoal Sign (15.1:1 vs canvas) */
+  --color-fg-muted: 82 91 86;          /* #525B56 Ash Milestone (6.1:1 vs canvas, 6.8:1 vs surface) */
+  --color-primary: 15 110 86;          /* #0F6E56 Konkan Teal (5.9:1 with #FFFFFF) */
+  --color-primary-fg: 255 255 255;     /* #FFFFFF */
+  --color-milestone: 154 91 0;         /* #9A5B00 Haldi Ochre (5.2:1 vs surface) */
+  --color-success: 15 110 86;          /* #0F6E56 Konkan Teal (5.9:1) */
+  --color-warning: 154 91 0;           /* #9A5B00 Haldi Ochre (5.2:1) */
+  --color-danger: 185 28 28;           /* #B91C1C Crimson Signal (6.4:1) */
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+}
+
+.dark {
+  /* Dark Mode — Basalt Night & Signal Cyan */
+  --color-canvas: 20 23 22;            /* #141716 Basalt Night */
+  --color-surface: 29 34 32;           /* #1D2220 Slate Coach */
+  --color-surface-muted: 39 46 43;     /* #272E2B Elevated Basalt */
+  --color-border: 62 72 67;            /* #3E4843 Basalt Border */
+  --color-fg: 236 239 236;             /* #ECEFEC Ivory Chalk (14.5:1 vs canvas) */
+  --color-fg-muted: 160 171 165;       /* #A0ABA5 Lichen Grey (6.9:1 vs canvas, 5.7:1 vs surface) */
+  --color-primary: 52 211 153;         /* #34D399 Signal Cyan (9.2:1 vs canvas, 8.8:1 with #0E1714) */
+  --color-primary-fg: 14 23 20;        /* #0E1714 Deep Basalt ink on Signal Cyan */
+  --color-milestone: 251 191 36;       /* #FBBF24 Amber Marker (10.1:1 vs surface) */
+  --color-success: 74 222 128;         /* #4ADE80 Mint Signal (8.6:1) */
+  --color-warning: 251 191 36;         /* #FBBF24 Amber Marker (10.1:1) */
+  --color-danger: 248 113 113;         /* #F87171 Coral Alert (6.1:1 vs surface) */
+}
+
+body {
+  background-color: rgb(var(--color-canvas));
+  color: rgb(var(--color-fg));
+  font-family: 'IBM Plex Sans', 'IBM Plex Sans Devanagari', 'Noto Sans Devanagari', system-ui, sans-serif;
+  line-height: 1.65;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+}

@@ -734,19 +734,39 @@ This document tracks all foundational technology and architecture choices, evalu
 - **Revisit if**:
   - Multi-tenant enterprise environments require dynamic organization-specific demo persona factories.
 
+---
 
+## ADR-029: Frontend Foundation (Phase 0) – Single-Flight Cross-Tab Token Refresh, OpenAPI Type Generation & Honest Data Primitives
 
+- **Options Considered**:
+  - Hand-written TypeScript API interfaces vs Automated `openapi-typescript` codegen from `/openapi.json`.
+  - Independent per-request token refresh vs Single-flight refresh mutex (`activeRefreshPromise` + `navigator.locks` + `BroadcastChannel`).
+  - Persisting `access_token` in `localStorage` vs In-memory `accessTokenMemory` closure with single-location `refresh_token`.
+- **Choice**: **Generated OpenAPI Types (`src/api/schema.d.ts`), In-Memory Access Token + Single-Flight Cross-Tab Refresh (`src/api/client.ts`), and 18 Semantic Design System Primitives (`src/components/ui/primitives.tsx`)**
+- **Reason**:
+  - **Token Rotation Safety**: Because `/v1/auth/refresh` rotates refresh tokens and revokes the entire token family if a token is reused, concurrent `401` responses in the same tab share `activeRefreshPromise`, while multiple open tabs synchronize via `navigator.locks.request('cn_single_flight_refresh_lock')` and broadcast rotated tokens over `BroadcastChannel('cn_auth_channel')`. Failed requests retry at most once (`_retried: true`) and never loop.
+  - **Zero Guessed Shapes**: `npm run generate:types` compiles `/public/openapi.json` into `src/api/schema.d.ts`, guaranteeing compile-time alignment with the backend contract.
+  - **Honest Data & XSS Prevention**: All text renders through React text nodes and `react-i18next` (`en` and `hi` locales) without `dangerouslySetInnerHTML`. `isSafeHttpUrl` restricts external links strictly to `http:` and `https:` with `rel="noopener noreferrer"`. Null catalog fields render `"Not verified yet"` rather than `0` or blank.
+- **Trade-off**:
+  - In-memory access tokens require a silent single-flight refresh when a user reloads the browser tab, adding one lightweight `/v1/auth/refresh` round-trip on hard refresh in exchange for strong XSS protection of access tokens.
+- **Revisit if**:
+  - The backend migrates refresh tokens to `HttpOnly; Secure; SameSite=Strict` cookies, allowing `localStorage` refresh token storage to be removed entirely.
 
+---
 
+## ADR-030: Frontend Phase 1 – Unified Onboarding/Profile Editor, Draft-Synced 30-Item Assessment Runner, and Class 11–12 Streams-First Results Ordering
 
-
-
-
-
-
-
-
-
-
-
+- **Options Considered**:
+  - Separate multi-route onboarding wizard vs Unified 4-step Onboarding Stepper + full-section Profile Editor (`src/pages/profile/ProfilePage.tsx`).
+  - Client-only localStorage assessment draft vs Server-persisted draft (`/v1/assessment/attempt` + `PUT /v1/assessment/answers`) with immediate autosave and `422 MISSING_ANSWERS` recovery (`src/pages/assessment/AssessmentPage.tsx`).
+  - Identical results layout for all students vs Education-stage-aware DOM ordering placing Recommended Streams & Subjects first for `class_11_12` students (`src/pages/assessment/AssessmentResultsPage.tsx`).
+- **Choice**: **Unified Stepper + Profile Editor with Live 8-Section Completeness Meter, Server-Backed Autosave Assessment Runner (5-per-page & 1-at-a-time modes + Review Screen), and Education-Stage-Aware Results View with Retake History and 500-Char Grounded Q&A**
+- **Reason**:
+  - **Live Completeness & Safe External Links**: Students immediately see how each of the 8 profile sections contributes to career compatibility accuracy, and every project/certificate URL is validated via `isSafeHttpUrl` (`http:` / `https:` only) and rendered with `rel="noopener noreferrer"`.
+  - **Resilient Assessment UX**: Supporting both 5-per-page and 1-at-a-time display modes accommodates desktop and low-bandwidth mobile screens. Every rating selection autosaves to `/v1/assessment/answers`, and the Review-Before-Submit view highlights any unanswered items (or `422 MISSING_ANSWERS` server field errors) with one-click jump-to-question navigation.
+  - **Stage-Appropriate Counseling (`class_11_12` vs `college`)**: High school students in Class 11–12 must choose their academic stream (e.g., Science PCM with Computer Science, Commerce with Mathematics) before targeting long-term careers; rendering `recommended_streams` ahead of `recommended_careers` in the DOM enforces this pedagogical priority.
+- **Trade-off**:
+  - Autosaving on every Likert click sends up to 30 lightweight `PUT /v1/assessment/answers` requests per attempt, which is well within rate limits and prevents any lost work on flaky mobile networks.
+- **Revisit if**:
+  - High-concurrency classroom testing requires debouncing draft saves into 2-second batch windows.
 
