@@ -4,6 +4,27 @@ This document tracks the ongoing operational state of the codebase across engine
 
 ---
 
+## Session: 2026-10-24 (v0) – Frontend Foundation (Approved Scope)
+
+### Done
+- Added a new `frontend/` React + TypeScript + Vite application shell; the FastAPI backend remains unchanged.
+- Added responsive student workspace navigation with Overview, Assessment, and Career paths routes.
+- Added the first visual foundation: mobile-first layout, light/dark-preview-safe semantic styling, keyboard focus states, reduced-motion handling, and English/Hindi language toggle placeholder.
+- Added the approved pinned frontend dependency register to `docs/DEPENDENCIES.md`.
+- No API endpoint is called yet; no mock endpoint is required for this foundation-only scope.
+
+### In progress
+- Waiting for approval of the first API-backed assessment screen.
+
+### Broken or risky
+- `npm install` reports transitive audit findings from the generated toolchain; no `--force` audit remediation was applied because it can introduce unapproved dependency changes.
+
+### Next
+- Generate `openapi-types.ts` from the backend schema and add MSW handlers only when a screen needs an endpoint.
+- Build assessment loading, empty, error, draft, and submitted states against the existing `/v1/assessment/*` contract.
+
+---
+
 ## Session: 2026-10-23 (Gemini 3.8 Flash (Medium)) – Assessment Engine Stage 1 (Questions, Drafts & Resuming)
 
 ### Done
